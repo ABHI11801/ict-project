@@ -1,0 +1,35 @@
+
+body {
+  margin: 0;
+  animation: breathe-bg 8s ease-in-out infinite;
+}
+
+@keyframes breathe-bg {
+  0%, 100% {
+    background-color: rgb(221, 219, 219);
+  }
+  50% {
+    background-color: rgb(196, 196, 199);
+  }
+}
+
+
+.glitter {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  pointer-events: none;
+  z-index: 9999;
+  animation: glitter-fade 1s ease-out forwards;
+}
+
+@keyframes glitter-fade {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translate(20px, -20px);
+  }
+}

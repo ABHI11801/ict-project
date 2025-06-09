@@ -1,0 +1,21 @@
+import { Button, Typography } from '@mui/material'
+import React from 'react'
+
+const CreateLead = () => {
+    const style ={
+        paddingTop:"1vw",
+        paddingBottom:"1vw",
+        paddingRight:"3vw",
+        paddingLeft:"3vw",
+        borderRadius:"1vw",
+        boxShadow:"4px 4px 10px 4px rgba(0, 0, 0, 0.2)",
+        backgroundColor: "rgb(125,150,255)"
+    }
+  return (
+    <div style={{width:"100%"}}>
+        <Button variant='contained' sx={style}><Typography variant='h5'>CREATE NEW LEAD</Typography></Button>
+    </div>
+  )
+}
+
+export default CreateLead
