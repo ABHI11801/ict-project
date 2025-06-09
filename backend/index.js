@@ -3,6 +3,7 @@ const app = express()
 
 const db = require('./db')
 var users = require('./models/user')
+var leads = require('./models/lead')
 
 const port = 5000
 
@@ -13,6 +14,21 @@ app.use(cors())
 app.get('/view',async(req,res)=>{
     const user = await users.find()
     return res.json(user)
+})
+
+app.get('/viewleads/:team',async(req,res)=>{
+    const team = req.params.team
+    const user = await leads.find({CurrentTeam : team})
+    return res.json(user)
+})
+
+app.post('/createlead',async(req,res)=>{
+    try {
+        await leads(req.body).save()
+        res.send("lead created")
+    } catch (err) {
+        console.log(err)
+    }  
 })
 
 
