@@ -10,6 +10,7 @@ import ExecutiveDashboard from './pages/ExecutiveDashboard'
 import ManagerDashboard from './pages/ManagerDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 import LeadDetails from './pages/LeadDetails'
+import UserDetails from './pages/UserDetails'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,7 +18,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Login/>}/>
+        <Route path='/' element={<AdminDashboard/>}/>
         <Route path='/executive' element={<ExecutiveDashboard/>}/>
         <Route path='/manager' element={<ManagerDashboard/>}/>
         <Route path='/admin' element={<AdminDashboard/>}/>
@@ -25,6 +26,7 @@ function App() {
         <Route path='/about' element={<About/>}/>
         <Route path='/contact' element={<Contactus/>}/>
         <Route path='/LeadDetails' element={<LeadDetails/>}/>
+        <Route path='/UserDetails' element={<UserDetails/>}/>
         
       </Routes>
     </>

@@ -1,9 +1,12 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import React from 'react'
 
-const DataTable = ({data}) => {
+const DataTable = ({data,showButtons=false,onRefresh}) => {
     if(!data || data.length===0){
         return (<div>No data</div>)
+    }
+    const updateData=(row)=>{
+        
     }
 
     const headers = Object.keys(data[0]).slice(1, -1)
@@ -28,6 +31,9 @@ const DataTable = ({data}) => {
                                 ))}
                             </TableRow>
                         ))}
+                        {showButtons && (
+                            <TableCell><Button onClick={updateData(row)}>UPDATE</Button></TableCell>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

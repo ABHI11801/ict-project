@@ -4,6 +4,7 @@ const app = express()
 const db = require('./db')
 var users = require('./models/user')
 var leads = require('./models/lead')
+var teams = require('./models/team')
 
 const port = 5000
 
@@ -53,10 +54,46 @@ app.post('/login',async (req,res)=>{
 })
 
 
+//********add new team****************
+app.post('/addTeam',async(req,res)=>{
+    try {
+        await teams(req.body).save()
+        res.send('Team added')
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
+//************view teams********** *
+app.get('/viewteams',async(req,res)=>{
+    try {
+        const teamname = await teams.find({},{TeamName:1, _id:0})
+        return res.json(teamname)
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
+//*********view teamname and completed vs active */
+app.get('/getTeamdata',async(req,res)=>{
+    try {
+        const teamdeets = await teams.find({},{TeamName:1,Active:1,Completed:1,_id:0})
+        return res.json(teamdeets)
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.post('/addActiveTeamdata',async (req,res)=>{
+    try {
+        const team = await teams.findOneAndUpdate({TeamName:req.body.CurrentTeam},{$inc :{Active:1}})
+        res.send("Updated")
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
 
