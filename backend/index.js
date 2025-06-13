@@ -40,6 +40,7 @@ app.post('/addUser',async (req,res)=>{
         console.log(err)
     }
 })
+
 app.post('/login',async (req,res)=>{
     const username = req.body.Username
     const password = req.body.Password
@@ -50,6 +51,10 @@ app.post('/login',async (req,res)=>{
     }
 
     return res.status(200).json(user)
+})
+ app.get('/viewcontact',async(req,res)=>{
+     const user = await users.find({},'Name Email Phone Role')
+        return res.json(user)
 })
 
 
