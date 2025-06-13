@@ -4,11 +4,12 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Login from './pages/Login'
 import Contactus from './components/Contactus'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes} from 'react-router-dom'
 import About from './pages/About'
 import ExecutiveDashboard from './pages/ExecutiveDashboard'
 import ManagerDashboard from './pages/ManagerDashboard'
 import AdminDashboard from './pages/AdminDashboard'
+import LeadDetails from './pages/LeadDetails'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -23,7 +24,8 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/contact' element={<Contactus/>}/>
-      </Routes>*/
+
+      </Routes>
     </>
   )
 }
