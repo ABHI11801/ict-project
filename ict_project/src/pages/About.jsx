@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const About = () => {
   const navigate = useNavigate()
   return (
-    <div>
+    <div style={{backgroundColor:"black"}}>
     
       <div style={{
         display: 'flex',

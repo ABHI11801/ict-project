@@ -31,7 +31,8 @@ const UserDetails = () => {
 
     const submitHandler = () => {
         console.log("button clicked")
-        if (userData) {
+        console.log(inputs)
+        if (userData?._id) {
             console.log(inputs)
             axios.put("http://localhost:5000/updateUser", { _id: userData._id, inputs })
                 .then((res) => {

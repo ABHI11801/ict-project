@@ -6,10 +6,10 @@ body {
 
 @keyframes breathe-bg {
   0%, 100% {
-    background-color: rgb(221, 219, 219);
+    background-color: rgb(151, 151, 151);
   }
   50% {
-    background-color: rgb(196, 196, 199);
+    background-color: rgb(84, 84, 85);
   }
 }
 
