@@ -5,6 +5,7 @@ const db = require('./db')
 var users = require('./models/user')
 var leads = require('./models/lead')
 var teams = require('./models/team')
+var teamleads = require('./models/teamlead')
 
 const port = 5000
 
@@ -17,6 +18,10 @@ app.get('/view',async(req,res)=>{
     return res.json(user)
 })
 
+app.get('/viewleads',async(req,res)=>{
+    const user = await leads.find()
+    return res.json(user)
+})
 app.get('/viewleads/:team',async(req,res)=>{
     const team = req.params.team
     const user = await leads.find({CurrentTeam : team})
@@ -100,6 +105,26 @@ app.post('/addActiveTeamdata',async (req,res)=>{
     }
 })
 
+app.put('/updateUser',async(req,res)=>{
+    try {
+        const {_id,inputs} = req.body
+        const user = await users.findByIdAndUpdate(_id,inputs,{new:true})
+        return res.json(user)
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.delete('/deleteUser/:id',async(req,res)=>{
+    try {
+        const id = req.params.id
+        console.log(id)
+        await users.findByIdAndDelete(id)
+        res.send("User Deleted")
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
 

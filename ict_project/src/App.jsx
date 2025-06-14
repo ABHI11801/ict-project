@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<ManagerDashboard/>}/>
+        <Route path='/' element={<Login/>}/>
         <Route path='/executive' element={<ExecutiveDashboard/>}/>
         <Route path='/manager' element={<ManagerDashboard/>}/>
         <Route path='/admin' element={<AdminDashboard/>}/>

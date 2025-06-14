@@ -23,7 +23,6 @@ const ManagerDashboard = () => {
       <div style={{ display: "flex", justifyContent: "space-evenly", justifySelf: "center", alignItems: "center", width: "80%" }}><TotalLeads /><ActiveLeads /></div>
       <br />
       <br />
-      <div style={{ display: "flex", justifySelf: "center", alignItems: "center" }}><CreateLead /></div>
       <div><DataTable data={users} /></div>
     </>
   );

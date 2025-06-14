@@ -1,59 +1,76 @@
-import React, { useState } from 'react'
 
-import Nav from '../components/Nav'
-import { Typography, TextField, Box, Button, Paper, ToggleButtonGroup, ToggleButton } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useEffect } from 'react';
+import { useState, useEffect } from "react"
+import Nav from "../components/Nav"
+import { Typography, TextField, Button, Paper, ToggleButtonGroup, ToggleButton } from "@mui/material"
+import { useLocation, useNavigate } from "react-router-dom"
+import axios from "axios"
+
 const UserDetails = () => {
-    var [inputs, setInputs] = useState();
-    const inputHandler = (e) => {
-        setInputs({ ...inputs, [e.target.name]: e.target.value });
-        console.log(inputs)
-    };
-    var location = useLocation();
-
-
-    console.log("state:", location.state);
-    const submitHandler = () => {
-        console.log("button clicked")
-        axios.post('http://localhost:5000/addUser', inputs)
-            .then((res) => {
-                console.log(res)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-
-    };
+    const location = useLocation()
     const navigate = useNavigate()
+    const userData = location.state?.userData || {}
 
-    const [selectedTeam, selectTeam] = useState(null)
-    const [selectedRole, selectRole] = useState(null)
+    const [inputs, setInputs] = useState({
+        EmpId: userData.EmpId || "",
+        Name: userData.Name || "",
+        Username: userData.Username || "",
+        Email: userData.Email || "",
+        Password: userData.Password || "",
+        Phone: userData.Phone || "",
+        Address: userData.Address || "",
+        Role: userData.Role || null,
+        Team: userData.Team || null,
+    })
+
     const [teams, setTeams] = useState([])
 
+    const inputHandler = (e) => {
+        setInputs({ ...inputs, [e.target.name]: e.target.value })
+        console.log(inputs)
+    }
+
+    const submitHandler = () => {
+        console.log("button clicked")
+        if (userData) {
+            console.log(inputs)
+            axios.put("http://localhost:5000/updateUser", { _id: userData._id, inputs })
+                .then((res) => {
+                    console.log(res)
+                    window.alert(`User with EmpId:${inputs.EmpId} updated successfully!`);
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        else {
+            axios
+                .post("http://localhost:5000/addUser", inputs)
+                .then((res) => {
+                    console.log(res)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }
+
     useEffect(() => {
-        axios.get('http://localhost:5000/viewteams')
-            .then((res) => {
-                setTeams(res.data)
-            })
+        axios.get("http://localhost:5000/viewteams").then((res) => {
+            setTeams(res.data)
+        })
     }, [])
 
     const saveTeam = (val) => {
         console.log(val)
-        selectTeam(val)
-        setInputs({ ...inputs, Team: val });
+        setInputs({ ...inputs, Team: val })
         console.log(inputs)
-
     }
+
     const saveRole = (val) => {
         console.log(val)
-        selectRole(val)
-        setInputs({ ...inputs, Role: val });
+        setInputs({ ...inputs, Role: val })
         console.log(inputs)
-
     }
-
 
     return (
         <div>
@@ -61,14 +78,14 @@ const UserDetails = () => {
             <Paper
                 elevation={3}
                 style={{
-                    padding: '20px',
-                    margin: '20px auto',
-                    maxWidth:'80vw',
-                    borderRadius: "15px"
+                    padding: "20px",
+                    margin: "20px auto",
+                    maxWidth: "80vw",
+                    borderRadius: "15px",
                 }}
             >
-                <div style={{display:"flex",flexDirection:"row",justifyContent:"space-evenly",padding:"5vw",}}>
-                    <div style={{minWidth:"25vw"}}>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", padding: "5vw" }}>
+                    <div style={{ minWidth: "25vw" }}>
                         <TextField
                             fullWidth
                             label="Employee ID"
@@ -76,8 +93,10 @@ const UserDetails = () => {
                             variant="outlined"
                             onChange={inputHandler}
                             name="EmpId"
+                            value={userData.EmpId}
                         />
-                        <br /><br />
+                        <br />
+                        <br />
 
                         <TextField
                             fullWidth
@@ -86,8 +105,10 @@ const UserDetails = () => {
                             variant="outlined"
                             onChange={inputHandler}
                             name="Name"
+                            value={inputs.Name}
                         />
-                        <br /><br />
+                        <br />
+                        <br />
 
                         <TextField
                             fullWidth
@@ -96,19 +117,23 @@ const UserDetails = () => {
                             variant="outlined"
                             onChange={inputHandler}
                             name="Username"
+                            value={inputs.Username}
                         />
 
-                        <br /><br />
+                        <br />
+                        <br />
                         <TextField
                             fullWidth
                             label="Email"
-                            placeholder="ENter email"
+                            placeholder="Enter email"
                             variant="outlined"
                             onChange={inputHandler}
                             name="Email"
+                            value={inputs.Email}
                         />
 
-                        <br /><br />
+                        <br />
+                        <br />
                         <TextField
                             fullWidth
                             label="Password"
@@ -116,10 +141,11 @@ const UserDetails = () => {
                             variant="outlined"
                             onChange={inputHandler}
                             name="Password"
+                            value={inputs.Password}
                         />
                     </div>
 
-                    <div style={{minWidth:"25vw"}}>
+                    <div style={{ minWidth: "25vw" }}>
                         <TextField
                             fullWidth
                             label="Phone no"
@@ -127,9 +153,11 @@ const UserDetails = () => {
                             variant="outlined"
                             onChange={inputHandler}
                             name="Phone"
+                            value={inputs.Phone}
                         />
 
-                        <br /><br />
+                        <br />
+                        <br />
                         <TextField
                             fullWidth
                             label="Address"
@@ -139,49 +167,43 @@ const UserDetails = () => {
                             variant="outlined"
                             onChange={inputHandler}
                             name="Address"
+                            value={inputs.Address}
                         />
-                        <br /><br />
-
+                        <br />
+                        <br />
 
                         <Typography>Role:</Typography>
-                        <ToggleButtonGroup
-                            value={selectedRole}
-                            onChange={(e, value) => saveRole(value)}
-                            exclusive
-                            name="Role"
-                        >
-                            <ToggleButton value={"admin"}>Admin</ToggleButton>
-                            <ToggleButton value={"manager"}>Manager</ToggleButton>
-                            <ToggleButton value={"executive"}>Executive</ToggleButton>
+                        <ToggleButtonGroup value={inputs.Role} onChange={(e, value) => saveRole(value)} exclusive name="Role">
+                            <ToggleButton value="admin">Admin</ToggleButton>
+                            <ToggleButton value="manager">Manager</ToggleButton>
+                            <ToggleButton value="executive">Executive</ToggleButton>
                         </ToggleButtonGroup>
+
                         <Typography>Team to be assigned to:</Typography>
-                        <ToggleButtonGroup
-                            value={selectedTeam}
-                            onChange={(e, value) => saveTeam(value)}
-                            exclusive
-                            name="Team"
-                        >
+                        <ToggleButtonGroup value={inputs.Team} onChange={(e, value) => saveTeam(value)} exclusive name="Team">
                             {teams.map((team, index) => (
-                                <ToggleButton key={index} value={team.TeamName}>{team.TeamName}</ToggleButton>
+                                <ToggleButton key={index} value={team.TeamName}>
+                                    {team.TeamName}
+                                </ToggleButton>
                             ))}
-                            <ToggleButton value={"admin"}>Admin</ToggleButton>
-                            <ToggleButton value={"executive"}>Executive</ToggleButton>
+                            <ToggleButton value="admin">Admin</ToggleButton>
+                            <ToggleButton value="executive">Executive</ToggleButton>
                         </ToggleButtonGroup>
-
-
                     </div>
                 </div>
 
-                <div style={{display:"flex",justifySelf:"center"}}>
+                <div style={{ display: "flex", justifyContent: "center" }}>
                     <Button
-                    variant='contained'
-                    onClick={() => { submitHandler(); navigate(-1) }}
-                    style={{ marginTop: '20px' }}
-                >
-                    Submit
-                </Button>
+                        variant="contained"
+                        onClick={() => {
+                            submitHandler()
+                            navigate(-1)
+                        }}
+                        style={{ marginTop: "20px" }}
+                    >
+                        Submit
+                    </Button>
                 </div>
-
             </Paper>
         </div>
     )
