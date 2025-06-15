@@ -1,47 +1,139 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Card, CardContent, CardHeader, TextField, Typography } from '@mui/material'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react"
+import { Button, CardContent, TextField, Typography, Box, Container, Paper } from "@mui/material"
+import { Login as LoginIcon, Person, Lock } from "@mui/icons-material"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 const Login = () => {
-  const navigate = useNavigate();
-  var [Username, setUserName] = useState('')
-  var [Password, setPassWord] = useState('')
+  const navigate = useNavigate()
+  const [Username, setUserName] = useState("")
+  const [Password, setPassWord] = useState("")
+  const [loading, setLoading] = useState(false)
+
   const userNameHandler = (e) => {
-    setUserName(e.target.value);
-  };
+    setUserName(e.target.value)
+  }
 
   const passwordHandler = (e) => {
-    setPassWord(e.target.value);
-  };
-  const checkUser = () => {
-    console.log("button clicked")
-    axios.post('http://localhost:5000/login', { Username, Password })
-      .then((res) => {
-        if (res.status == 200) {
-          localStorage.setItem("role", res.data.Role)
-          localStorage.setItem("team", res.data.Team)
-          navigate(`/${res.data.Role}`, { replace: true })
-        }
-      })
-      .catch((err) => { console.log(err) })
+    setPassWord(e.target.value)
   }
-  return (
-    <div style={{ backgroundColor: 'rgb(63, 215, 253)', justifySelf: "center", borderRadius: '20px', boxShadow: ' 4px 4px 10px 4px rgba(255, 255, 255, 0.3)', marginTop: "10vw"}}>
-      <Card sx={{ padding: '3vw', borderRadius: '20px' }}>
-        <CardHeader title="CRM-LOGIN" sx={{ width: '100%', padding: '0', paddingBottom: '1vw', justifyContent: 'center', flexDirection: 'column' }} titleTypographyProps={{ fontSize: '1.8rem', fontWeight: 'bold', textAlign: 'center' }} />
 
-        <br />
-        <CardContent sx={{ display: 'flex', flexDirection: 'column', minWidth: '20vw' }}>
-          <TextField label='Username' name='Username' onChange={userNameHandler} />
-          <br />
-          <TextField label='Password' name='Password' onChange={passwordHandler} />
-          <br />
-          <br />
-          <Button variant='outlined' sx={{ color: 'rgb(3, 196, 45)', fontSize: '1vw', fontWeight: '600', borderColor: "black" }} onClick={checkUser}>LOGIN</Button>
-        </CardContent>
-      </Card>
-    </div>
+  const checkUser = async () => {
+    console.log("button clicked")
+    setLoading(true)
+    try {
+      const res = await axios.post("http://localhost:5000/login", { Username, Password })
+      if (res.status === 200) {
+        localStorage.setItem("role", res.data.Role)
+        localStorage.setItem("team", res.data.Team)
+        navigate(`/${res.data.Role}`, { replace: true})
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg,rgb(102, 36, 139) 0%,rgb(67, 10, 124) 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 2,
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={10}
+          sx={{
+            borderRadius: 4,
+            overflow: "hidden",
+            background: "white",
+          }}
+        >
+          <Box
+            sx={{
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              color: "white",
+              p: 8,
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+              CRM Login
+            </Typography>
+          </Box>
+
+          <CardContent sx={{ p: 4 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <Box sx={{ position: "relative" }}>
+                <TextField
+                  fullWidth
+                  label="Username"
+                  placeholder="Username"
+                  name="Username"
+                  onChange={userNameHandler}
+                  value={Username}
+                  InputProps={{
+                    startAdornment: <Person sx={{ color: "text.secondary", mr: 1 }} />,
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                    },
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ position: "relative" }}>
+                <TextField
+                  fullWidth
+                  label="Password"
+                  name="Password"
+                  placeholder="Password"
+                  type="password"
+                  onChange={passwordHandler}
+                  value={Password}
+                  InputProps={{
+                    startAdornment: <Lock sx={{ color: "text.secondary", mr: 1 }} />,
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                    },
+                  }}
+                />
+              </Box>
+
+              <Button
+                variant="contained"
+                size="large"
+                onClick={checkUser}
+                disabled={loading || !Username || !Password}
+                sx={{
+                  borderRadius: 2,
+                  py: 1.5,
+                  mt: 2,
+                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  "&:hover": {
+                    background: "linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)",
+                  },
+                  "&:disabled": {
+                    background: "#e0e0e0",
+                  },
+                }}
+              >
+                {loading ? "Signing In..." : "Sign In"}
+              </Button>
+            </Box>
+          </CardContent>
+        </Paper>
+      </Container>
+    </Box>
   )
 }
 
