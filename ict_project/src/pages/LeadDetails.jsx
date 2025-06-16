@@ -44,9 +44,10 @@ const LeadDetails = () => {
 
   const submitHandler = () => {
     console.log("button clicked")
-    const dataToSubmit = { ...inputs, PreviousTeamNotes: "" }
+    const Input = { ...inputs, PreviousTeamNotes: "" }
+    console.log(inputs)
     axios
-      .post("http://localhost:5000/createlead", inputs)
+      .post("http://localhost:5000/createlead", Input)
       .then((res) => {
         console.log(res)
       })
@@ -55,13 +56,22 @@ const LeadDetails = () => {
       })
 
     axios
-      .post("http://localhost:5000/addActiveTeamdata", inputs)
+      .post("http://localhost:5000/addActiveTeamdata", Input)
       .then((res) => {
         console.log(res)
       })
       .catch((err) => {
         console.log(err)
       })
+
+    axios
+    .put(`http://localhost:5000/addToTeamLead/${Input.LeadId}/${Input.CurrentTeam}/active`)
+    .then((res)=>{
+      console.log(res)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   }
 
   console.log("state:", location.state)
@@ -126,7 +136,7 @@ const LeadDetails = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Box sx={{ height: "40px",marginTop:"8px",minWidth:"20vw"}}></Box>
+              <Box sx={{ height: "40px", marginTop: "8px", minWidth: "20vw" }}></Box>
               <TextField
                 fullWidth
                 label="Lead Title"
@@ -167,7 +177,7 @@ const LeadDetails = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 , minWidth:"33vw"}}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2, minWidth: "33vw" }}>
                 <Description color="primary" />
                 <Typography variant="h6" color="primary">
                   Project Details
@@ -188,7 +198,7 @@ const LeadDetails = () => {
                   },
                 }}
               />
-            </Grid> 
+            </Grid>
 
             <Grid item xs={12} md={6}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
@@ -229,7 +239,7 @@ const LeadDetails = () => {
               </ToggleButtonGroup>
             </Grid>
 
-                 
+
             <Grid item xs={12}>
               <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
                 <Button

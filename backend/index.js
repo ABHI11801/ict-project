@@ -104,6 +104,14 @@ app.post('/addActiveTeamdata',async (req,res)=>{
         console.log(err)
     }
 })
+app.post('/addCompletedTeamdata',async (req,res)=>{
+    try {
+        const team = await teams.findOneAndUpdate({TeamName:req.body.CurrentTeam},{$inc :{Completed:1,Active:-1}})
+        res.send("Updated")
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 app.put('/updateUser',async(req,res)=>{
     try {
@@ -126,8 +134,45 @@ app.delete('/deleteUser/:id',async(req,res)=>{
     }
 })
 
+app.put('/passlead/:id',async(req,res)=>{
+    try {
+        const id = req.params.id
+        const team = req.body.CurrentTeam
+        const notes = req.body.PreviousTeamNotes
 
+        const lead = await leads.findById(id)
+        const newNotes = `${lead.CurrentTeam}: ${notes}`
+        const updatedNotes = lead.PreviousTeamNotes ? `${lead.PreviousTeamNotes}\n${newNotes}` : newNotes
+        
+        const updatedLead = await leads.findByIdAndUpdate(id,{$set:{CurrentTeam:team,PreviousTeamNotes:updatedNotes}})
+        return res.send("Updated")
+    } catch (err) {
+        console.log(err)
+    }
+})
 
+app.put('/addToTeamLead/:leadid/:teamname/:status',async(req,res)=>{
+    try {
+        const leadid = req.params.leadid
+        const teamname = req.params.teamname
+        const status = req.params.status
+
+        const lead = await teamleads.findOneAndUpdate({LeadId:leadid,TeamName:teamname},{LeadId:leadid,TeamName:teamname,Status:status},{upsert:true})
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.get('/getLeadsCount', async (req, res) => {
+  try {
+    const activeCount = await leads.countDocuments({ CurrentStatus: "active" });
+    const totalCount = await leads.countDocuments();
+    res.json({ active: activeCount, total: totalCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching counts");
+  }
+});
 
 
 

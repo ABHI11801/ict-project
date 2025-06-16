@@ -1,7 +1,20 @@
 import { Typography, Card, CardContent, Box } from "@mui/material"
 import { TrendingUp } from "@mui/icons-material"
+import axios from "axios"
+import { useState } from "react"
+import { useEffect } from "react"
 
 const ActiveLeads = () => {
+
+  const [active,setActive] = useState()
+  const [total,setTotal] = useState()
+  useEffect(()=>{
+    axios.get('http://localhost:5000/getLeadsCount')
+    .then((res)=>{
+      setActive(res.data.active)
+      setTotal(res.data.total)
+    })
+  },[])
   return (
     <Card
       elevation={3}
@@ -39,7 +52,7 @@ const ActiveLeads = () => {
             lineHeight: 1,
           }}
         >
-          300
+          {active}
         </Typography>
         <Box
           sx={{
@@ -53,7 +66,7 @@ const ActiveLeads = () => {
           <Box
             sx={{
               height: "100%",
-              width: "75%",
+              width: `${((total-active)/total)*100}%`,
               background: "rgba(255,255,255,0.8)",
               borderRadius: 2,
             }}

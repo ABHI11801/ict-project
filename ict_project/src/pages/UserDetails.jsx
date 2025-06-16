@@ -91,7 +91,6 @@ const UserDetails = () => {
       <Nav />
 
       <Container maxWidth="xl" sx={{ py: 4 }}>
-        {/* Header */}
         <Paper
           elevation={2}
           sx={{
@@ -115,7 +114,6 @@ const UserDetails = () => {
           </Box>
         </Paper>
 
-        {/* Main Form */}
         <Paper
           elevation={3}
           sx={{
@@ -126,7 +124,6 @@ const UserDetails = () => {
         >
           <Box sx={{ p: 5 }}>
             <Grid container spacing={4}>
-              {/* Left Column */}
               <Grid item xs={12} lg={6}>
                 <Card
                   elevation={1}
@@ -228,7 +225,6 @@ const UserDetails = () => {
                 </Card>
               </Grid>
 
-              {/* Right Column */}
               <Grid item xs={12} lg={6}>
                 <Card
                   elevation={1}
@@ -361,8 +357,7 @@ const UserDetails = () => {
               </Grid>
             </Grid>
           </Box>
-
-          {/* Submit Section */}
+          
           <Box
             sx={{
               p: 4,

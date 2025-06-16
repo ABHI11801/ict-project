@@ -1,7 +1,17 @@
 import { Typography, Card, CardContent, Box } from "@mui/material"
 import { Assessment } from "@mui/icons-material"
+import { useEffect } from "react"
+import { useState } from "react"
+import axios from "axios"
 
 const TotalLeads = () => {
+  const [total,setTotal] = useState()
+    useEffect(()=>{
+      axios.get('http://localhost:5000/getLeadsCount')
+      .then((res)=>{
+        setTotal(res.data.total)
+      })
+    },[])
   return (
     <Card
       elevation={3}
@@ -39,7 +49,7 @@ const TotalLeads = () => {
             lineHeight: 1,
           }}
         >
-          300
+          {total}
         </Typography>
         <Box
           sx={{

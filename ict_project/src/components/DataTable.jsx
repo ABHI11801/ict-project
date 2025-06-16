@@ -11,13 +11,17 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  Button,
 } from "@mui/material"
 import { Edit, Delete } from "@mui/icons-material"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import PassPopUp from "./PassPopUp"
+import { useState } from "react"
 
-const DataTable = ({ data, showButtons = false }) => {
+const DataTable = ({ data, showButtons = false, showPass = false}) => {
   const navigate = useNavigate()
+  const [showPopup, setShowPopup] = useState(false);
 
   if (!data || data.length === 0) {
     return (
@@ -173,6 +177,10 @@ const DataTable = ({ data, showButtons = false }) => {
                       </Box>
                     </TableCell>
                   )}
+                  {showPass && (
+                    <Button onClick={() =>{ setShowPopup(true)}}>PASS</Button>
+                  )}
+                  <PassPopUp open={showPopup} onClose={()=>{setShowPopup(false)}}  id={row._id} leadid={row.LeadId} team={row.CurrentTeam}/>
                 </TableRow>
               ))}
             </TableBody>

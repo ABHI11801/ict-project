@@ -9,14 +9,14 @@ import ActiveLeads from "../components/ActiveLeads"
 import DataTable from "../components/DataTable"
 
 const ManagerDashboard = () => {
-  const [users, setUsers] = useState([])
+  const [leads, setLeads] = useState([])
   const team = localStorage.getItem("team")
 
   useEffect(() => {
     axios
       .get(`http://localhost:5000/viewleads/${team}`)
       .then((res) => {
-        setUsers(res.data)
+        setLeads(res.data)
       })
       .catch((err) => {
         console.error(err)
@@ -75,7 +75,7 @@ const ManagerDashboard = () => {
           >
             Team Leads Overview
           </Typography>
-          <DataTable data={users} />
+          <DataTable data={leads} showPass={true} />
         </Box>
       </Container>
     </Box>
