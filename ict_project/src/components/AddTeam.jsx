@@ -22,6 +22,7 @@ const AddTeam = () => {
       const res = await axios.post("http://localhost:5000/addTeam", inputs)
       console.log(res.data)
       window.alert(`Team: ${inputs.TeamName} added successfully!`)
+      window.location.reload()
       setInputs({ TeamName: "" })
     } catch (err) {
       console.log(err)

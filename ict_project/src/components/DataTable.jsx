@@ -19,9 +19,11 @@ import { useNavigate } from "react-router-dom"
 import PassPopUp from "./PassPopUp"
 import { useState } from "react"
 
-const DataTable = ({ data, showButtons = false, showPass = false}) => {
+const DataTable = ({ data, showButtons = false, showPass = false }) => {
   const navigate = useNavigate()
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+
 
   if (!data || data.length === 0) {
     return (
@@ -178,9 +180,18 @@ const DataTable = ({ data, showButtons = false, showPass = false}) => {
                     </TableCell>
                   )}
                   {showPass && (
-                    <Button onClick={() =>{ setShowPopup(true)}}>PASS</Button>
+                    <Button onClick={() => { setSelectedRow(row); setShowPopup(true) }}>PASS</Button>
                   )}
-                  <PassPopUp open={showPopup} onClose={()=>{setShowPopup(false)}}  id={row._id} leadid={row.LeadId} team={row.CurrentTeam}/>
+                  {selectedRow && (
+                    <PassPopUp
+                      open={!!selectedRow}
+                      onClose={() => setSelectedRow(null)}
+                      id={selectedRow._id}
+                      leadid={selectedRow.LeadId}
+                      team={selectedRow.CurrentTeam}
+                    />
+                  )}
+
                 </TableRow>
               ))}
             </TableBody>

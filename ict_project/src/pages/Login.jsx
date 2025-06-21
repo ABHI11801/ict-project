@@ -1,6 +1,7 @@
+
 import { useState } from "react"
-import { Button, CardContent, TextField, Typography, Box, Container, Paper } from "@mui/material"
-import { Login as LoginIcon, Person, Lock } from "@mui/icons-material"
+import { Button, CardContent, TextField, Typography, Box, Container, Paper, IconButton } from "@mui/material"
+import { Person, Lock, Visibility, VisibilityOff } from "@mui/icons-material"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
@@ -9,6 +10,7 @@ const Login = () => {
   const [Username, setUserName] = useState("")
   const [Password, setPassWord] = useState("")
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const userNameHandler = (e) => {
     setUserName(e.target.value)
@@ -16,6 +18,10 @@ const Login = () => {
 
   const passwordHandler = (e) => {
     setPassWord(e.target.value)
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
   const checkUser = async () => {
@@ -26,10 +32,10 @@ const Login = () => {
       if (res.status === 200) {
         localStorage.setItem("role", res.data.Role)
         localStorage.setItem("team", res.data.Team)
-        navigate(`/${res.data.Role}`, { replace: true})
+        navigate(`/${res.data.Role}`, { replace: true })
       }
     } catch (err) {
-      console.log(err)
+      window.alert("Incorrect Credentials")
     } finally {
       setLoading(false)
     }
@@ -95,11 +101,16 @@ const Login = () => {
                   label="Password"
                   name="Password"
                   placeholder="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   onChange={passwordHandler}
                   value={Password}
                   InputProps={{
                     startAdornment: <Lock sx={{ color: "text.secondary", mr: 1 }} />,
+                    endAdornment: (
+                      <IconButton onClick={togglePasswordVisibility} edge="end" sx={{ color: "text.secondary" }}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    ),
                   }}
                   sx={{
                     "& .MuiOutlinedInput-root": {
