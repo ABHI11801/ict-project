@@ -66,6 +66,7 @@ const UserDetails = () => {
           console.log(err)
         })
     }
+    window.location.reload()
   }
 
   useEffect(() => {

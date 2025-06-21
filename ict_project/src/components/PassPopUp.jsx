@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 const PassPopUp = ({ open, onClose, id, leadid, team }) => {
     const [inputs, setInputs] = useState({})
     const [teams, setTeams] = useState([])
+    const check = team === "checkers"
     useEffect(() => {
         axios.get("http://localhost:5000/viewteams")
             .then((res) => {
@@ -46,6 +47,7 @@ const PassPopUp = ({ open, onClose, id, leadid, team }) => {
             .catch((err) => {
                 console.log(err)
             })
+            
         axios
             .put(`http://localhost:5000/addToTeamLead/${leadid}/${inputs.CurrentTeam}/active`)
             .then((res) => {
@@ -110,6 +112,12 @@ const PassPopUp = ({ open, onClose, id, leadid, team }) => {
                                 {team.TeamName}
                             </ToggleButton>
                         ))}
+                        {check && (
+                            <ToggleButton value="executive">
+                                <Group sx={{ mr: 1, fontSize: 16 }} />
+                                EXECUTIVE</ToggleButton>
+                        )}
+                        
                     </ToggleButtonGroup>
 
                     <TextField

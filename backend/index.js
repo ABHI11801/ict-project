@@ -12,33 +12,33 @@ const port = 5000
 app.use(express.json())
 const cors = require('cors')
 app.use(cors())
- 
-app.get('/view',async(req,res)=>{
+
+app.get('/view', async (req, res) => {
     const user = await users.find()
     return res.json(user)
 })
 
-app.get('/viewleads',async(req,res)=>{
+app.get('/viewleads', async (req, res) => {
     const user = await leads.find()
     return res.json(user)
 })
-app.get('/viewleads/:team',async(req,res)=>{
+app.get('/viewleads/:team', async (req, res) => {
     const team = req.params.team
-    const user = await leads.find({CurrentTeam : team})
+    const user = await leads.find({ CurrentTeam: team })
     return res.json(user)
 })
 
-app.post('/createlead',async(req,res)=>{
+app.post('/createlead', async (req, res) => {
     try {
         await leads(req.body).save()
         res.send("lead created")
     } catch (err) {
         console.log(err)
-    }  
+    }
 })
 
 
-app.post('/addUser',async (req,res)=>{
+app.post('/addUser', async (req, res) => {
     try {
         await users(req.body).save()
         res.send('User Added')
@@ -47,25 +47,25 @@ app.post('/addUser',async (req,res)=>{
     }
 })
 
-app.post('/login',async (req,res)=>{
+app.post('/login', async (req, res) => {
     const username = req.body.Username
     const password = req.body.Password
     const user = await users.findOne({ Username: username })
 
-    if(!user || user.Password !== password){
-        return res.status(401).json({message: 'Invalid username or password'})
+    if (!user || user.Password !== password) {
+        return res.status(401).json({ message: 'Invalid username or password' })
     }
 
     return res.status(200).json(user)
 })
- app.get('/viewcontact',async(req,res)=>{
-     const user = await users.find({},'Name Email Phone Role')
-        return res.json(user)
+app.get('/viewcontact', async (req, res) => {
+    const user = await users.find({}, 'Name Email Phone Role')
+    return res.json(user)
 })
 
 
 //********add new team****************
-app.post('/addTeam',async(req,res)=>{
+app.post('/addTeam', async (req, res) => {
     try {
         await teams(req.body).save()
         res.send('Team added')
@@ -76,9 +76,9 @@ app.post('/addTeam',async(req,res)=>{
 
 
 //************view teams********** *
-app.get('/viewteams',async(req,res)=>{
+app.get('/viewteams', async (req, res) => {
     try {
-        const teamname = await teams.find({},{TeamName:1, _id:0})
+        const teamname = await teams.find({}, { TeamName: 1, _id: 0 })
         return res.json(teamname)
     } catch (err) {
         console.log(err)
@@ -87,43 +87,43 @@ app.get('/viewteams',async(req,res)=>{
 
 
 //*********view teamname and completed vs active */
-app.get('/getTeamdata',async(req,res)=>{
+app.get('/getTeamdata', async (req, res) => {
     try {
-        const teamdeets = await teams.find({},{TeamName:1,Active:1,Completed:1,_id:0})
+        const teamdeets = await teams.find({}, { TeamName: 1, Active: 1, Completed: 1, _id: 0 })
         return res.json(teamdeets)
     } catch (err) {
         console.log(err)
     }
 })
 
-app.post('/addActiveTeamdata',async (req,res)=>{
+app.post('/addActiveTeamdata', async (req, res) => {
     try {
-        const team = await teams.findOneAndUpdate({TeamName:req.body.CurrentTeam},{$inc :{Active:1}})
+        const team = await teams.findOneAndUpdate({ TeamName: req.body.CurrentTeam }, { $inc: { Active: 1 } })
         res.send("Updated")
     } catch (err) {
         console.log(err)
     }
 })
-app.post('/addCompletedTeamdata',async (req,res)=>{
+app.post('/addCompletedTeamdata', async (req, res) => {
     try {
-        const team = await teams.findOneAndUpdate({TeamName:req.body.CurrentTeam},{$inc :{Completed:1,Active:-1}})
+        const team = await teams.findOneAndUpdate({ TeamName: req.body.CurrentTeam }, { $inc: { Completed: 1, Active: -1 } })
         res.send("Updated")
     } catch (err) {
         console.log(err)
     }
 })
 
-app.put('/updateUser',async(req,res)=>{
+app.put('/updateUser', async (req, res) => {
     try {
-        const {_id,inputs} = req.body
-        const user = await users.findByIdAndUpdate(_id,inputs,{new:true})
+        const { _id, inputs } = req.body
+        const user = await users.findByIdAndUpdate(_id, inputs, { new: true })
         return res.json(user)
     } catch (err) {
         console.log(err)
     }
 })
 
-app.delete('/deleteUser/:id',async(req,res)=>{
+app.delete('/deleteUser/:id', async (req, res) => {
     try {
         const id = req.params.id
         console.log(id)
@@ -134,7 +134,7 @@ app.delete('/deleteUser/:id',async(req,res)=>{
     }
 })
 
-app.put('/passlead/:id',async(req,res)=>{
+app.put('/passlead/:id', async (req, res) => {
     try {
         const id = req.params.id
         const team = req.body.CurrentTeam
@@ -143,41 +143,51 @@ app.put('/passlead/:id',async(req,res)=>{
         const lead = await leads.findById(id)
         const newNotes = `${lead.CurrentTeam}: ${notes}`
         const updatedNotes = lead.PreviousTeamNotes ? `${lead.PreviousTeamNotes}\n${newNotes}` : newNotes
-        
-        const updatedLead = await leads.findByIdAndUpdate(id,{$set:{CurrentTeam:team,PreviousTeamNotes:updatedNotes}})
+
+        const updatedLead = await leads.findByIdAndUpdate(id, { $set: { CurrentTeam: team, PreviousTeamNotes: updatedNotes } })
         return res.send("Updated")
     } catch (err) {
         console.log(err)
     }
 })
 
-app.put('/addToTeamLead/:leadid/:teamname/:status',async(req,res)=>{
+app.put('/addToTeamLead/:leadid/:teamname/:status', async (req, res) => {
     try {
-        const leadid = req.params.leadid
-        const teamname = req.params.teamname
-        const status = req.params.status
+        const { leadid, teamname, status } = req.params;
 
-        const lead = await teamleads.findOneAndUpdate({LeadId:leadid,TeamName:teamname},{LeadId:leadid,TeamName:teamname,Status:status},{upsert:true})
+        if (teamname === "executive") {
+            await leads.findOneAndUpdate({ LeadId: leadid }, { CurrentStatus: "completed" });
+        } else {
+            await teamleads.findOneAndUpdate(
+                { LeadId: leadid, TeamName: teamname },
+                { LeadId: leadid, TeamName: teamname, Status: status },
+                { upsert: true }
+            );
+        }
+
+        res.sendStatus(200);
     } catch (err) {
-        console.log(err)
+        console.log(err);
+        res.sendStatus(500);
     }
-})
+});
+
 
 app.get('/getLeadsCount', async (req, res) => {
-  try {
-    const activeCount = await leads.countDocuments({ CurrentStatus: "active" });
-    const totalCount = await leads.countDocuments();
-    res.json({ active: activeCount, total: totalCount });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching counts");
-  }
+    try {
+        const activeCount = await leads.countDocuments({ CurrentStatus: "active" });
+        const totalCount = await leads.countDocuments();
+        res.json({ active: activeCount, total: totalCount });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error fetching counts");
+    }
 });
 
 
 
 
 
-app.listen(port, () =>{
+app.listen(port, () => {
     console.log(`Server running on port ${port}`)
 })
